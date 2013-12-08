@@ -147,5 +147,7 @@ function coordinate_field_field_formatter_view($obj_type, $object, $field, $inst
  * Implements hook_field_is_empty()
  */
 function coordinate_field_field_is_empty($item, $field) {
-  return false;
+  if (empty($item['position_x']) && empty($item['position_y']) {
+    return TRUE;
+  }
 }
