@@ -130,6 +130,8 @@ function coordinate_field_field_formatter_view($obj_type, $object, $field, $inst
     if (!empty($item)) {
       switch ($display['type']) {
         case 'coordinate_field_string':
+          // @todo
+          // Actaully put something here
           $output = 'boom';
           break;
       }
