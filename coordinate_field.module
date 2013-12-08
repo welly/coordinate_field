@@ -107,6 +107,45 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
 }
 
 /**
+ * Implements hook_field_validate().
+ */
+function coordinate_field_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  foreach ($items as $delta => $item) {
+    if (!coordinate_field_field_is_empty($item, $field)) {
+      // Check that X is a number
+      if (!is_numeric($item['position_x'])) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'coordinate_field_invalid_position_x',
+          'message' => t('X Coordinate must be an integer or decimal.'),
+        );
+      }
+
+      // Check that Y is a number
+      if (!is_numeric($item['position_y'])) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'coordinate_field_invalid_position_y',
+          'message' => t('Y Coordinate must be an integer or decimal.'),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_error().
+ */
+function coordinate_field_field_widget_error($element, $error, $form, &$form_state) {
+  switch ($error['error']) {
+    case 'coordinate_field_invalid_position_x':
+      form_error($element['position_x'], $error['message']);
+      break;
+    case 'coordinate_field_invalid_position_y':
+      form_error($element['position_y'], $error['message']);
+      break;
+  }
+}
+
+/**
  * Implements hook_field_formatter_info()
  */
 function coordinate_field_field_formatter_info() {
