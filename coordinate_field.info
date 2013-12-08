@@ -1,0 +1,3 @@
+name = Coordinate Field
+description = Creates a field type to collect coordinate data.
+core = 7.x

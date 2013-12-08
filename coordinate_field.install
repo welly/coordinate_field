@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * Implements hook_field_schema()
+ */
+function coordinate_field_field_schema($field) {
+  switch($field['type']) {
+    case 'coordinate_field':
+      return array(
+        'columns' => array(
+          'position_x' => array(
+            'type' => 'float',
+            'not null' => FALSE,
+          ),
+          'position_y' => array(
+            'type' => 'float',
+            'not null' => FALSE,
+          ),
+        ),
+      );
+      break;
+  }
+}

@@ -1,0 +1,127 @@
+<?php
+
+function coordinate_field_field_info() {
+  return array(
+    'coordinate_field' => array(
+      'label' => t('Coordinates'),
+      'description' => t('Store X and Y coordinate values.'),
+      'settings' => array(
+        'unit' => 'px',
+      ),
+      'default_widget' => 'coordinate_field_widget',
+      'default_formatter' => 'coordinate_field_default',
+    ),
+  );
+}
+
+function coordinate_field_field_settings_form($field, $instance) {
+  $defaults = field_info_field_settings($field['type']);
+  $settings = array_merge($defaults, $field['settings']);
+
+  $scheme_options = array();
+
+  // @todo:
+  // Add more units for support as needed.
+  $units = array('px' => 'Pixels');
+
+  $form['unit'] = array(
+    '#title' => t('Coordinate Units'),
+    '#description' => t('Which unit of measure our coordinates will be in'),
+    '#type' => 'select',
+    '#options' => $units,
+    '#default_value' => $settings['unit'],
+  );
+
+  return $form;
+}
+
+function coordinate_field_field_widget_info() {
+  return array(
+    'coordinate_field_widget' => array(
+      'label' => t('Default'),
+      'description' => t('Input X and Y values.'),
+      'field types' => array('coordinate_field'),
+      'behaviors' => array(
+        'default value' => FIELD_BEHAVIOR_NONE,
+      ),
+    ),
+  );
+}
+
+function coordinate_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $instance_settings = $instance['settings'];
+  $field_settings = $field['settings'];
+
+  switch($field['type']) {
+    case 'coordinate_field':
+      // Not sure why we have to manually add the field name to the widget,
+      // but seems like we do.
+      $element['label'] = array(
+        '#markup' => theme('html_tag', array(
+          'element' => array(
+            '#tag' => 'label',
+            '#value' => $instance['label'],
+          ),
+        )),
+      );
+
+      $element['coordinate_wrapper'] = array(
+        '#type' => 'container',
+        '#attributes' => array(
+          'class' => array('container-inline'),
+        ),
+      );
+
+      // Pulled this out of the wrapper, now it tries to save and breaks.
+      // Progress!!!
+      $element['position_x'] = array(
+        '#title' => t('X'),
+        '#type' => 'textfield',
+        '#size' => 15,
+        '#suffix' => ' x ',
+        '#value' => isset($items[$delta]['position_x']) ? $items[$delta]['position_x'] : '',
+      );
+
+      $element['position_y'] = array(
+        '#title' => t('Y'),
+        '#type' => 'textfield',
+        '#size' => 15,
+        '#value' => isset($items[$delta]['position_y']) ? $items[$delta]['position_y'] : '',
+      );
+      break;
+  }
+
+  return $element;
+}
+
+function coordinate_field_field_formatter_info() {
+  return array(
+    'coordinate_field_string' => array(
+      'label' => t('String'),
+      'field types' => array('coordinate_field'),
+    ),
+  );
+}
+
+function coordinate_field_field_formatter_view($obj_type, $object, $field, $instance, $langcode, $items, $display) {
+  $element = '';
+
+  foreach ($items as $delta => $item) {
+    if (!empty($item)) {
+      switch ($display['type']) {
+        case 'coordinate_field_string':
+          $output = 'boom';
+          break;
+      }
+
+      $element[$delta] = array('#markup' => $output);
+    }
+  }
+
+  return $element;
+}
+
+
+function coordinate_field_field_is_empty($item, $field) {
+  return false;
+}
