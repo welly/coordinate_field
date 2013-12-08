@@ -63,8 +63,6 @@ function coordinate_field_field_widget_info() {
 function coordinate_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   $field_settings = $field['settings'];
 
-  dpm($field_settings);
-
   switch($field['type']) {
     case 'coordinate_field':
       // Not sure why we have to manually add the field name to the widget,
@@ -92,7 +90,7 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
         '#type' => 'textfield',
         '#size' => 15,
         '#suffix' => $field_settings['unit'] . ' x ',
-        '#value' => isset($items[$delta]['position_x']) ? $items[$delta]['position_x'] : '',
+        '#default_value' => isset($items[$delta]['position_x']) ? $items[$delta]['position_x'] : '',
       );
 
       $element['position_y'] = array(
@@ -100,7 +98,7 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
         '#type' => 'textfield',
         '#size' => 15,
         '#suffix' => $field_settings['unit'],
-        '#value' => isset($items[$delta]['position_y']) ? $items[$delta]['position_y'] : '',
+        '#default_value' => isset($items[$delta]['position_y']) ? $items[$delta]['position_y'] : '',
       );
       break;
   }
