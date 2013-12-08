@@ -80,20 +80,12 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
         )),
       );
 
-      $element['coordinate_wrapper'] = array(
-        '#type' => 'container',
-        '#attributes' => array(
-          'class' => array('container-inline'),
-        ),
-      );
-
-      // @todo
-      // Put this back in a wrapper so it renders inline
       $element['position_x'] = array(
         '#title' => t('X'),
         '#type' => 'textfield',
         '#size' => 15,
-        '#suffix' => $field_settings['unit'] . ' x ',
+        '#prefix' => '<div class="container-inline">',
+        '#suffix' => $field_settings['unit'] . '</div>',
         '#default_value' => isset($items[$delta]['position_x']) ? $items[$delta]['position_x'] : '',
       );
 
@@ -101,7 +93,8 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
         '#title' => t('Y'),
         '#type' => 'textfield',
         '#size' => 15,
-        '#suffix' => $field_settings['unit'],
+        '#prefix' => '<div class="container-inline">',
+        '#suffix' => $field_settings['unit'] . '</div>',
         '#default_value' => isset($items[$delta]['position_y']) ? $items[$delta]['position_y'] : '',
       );
       break;
