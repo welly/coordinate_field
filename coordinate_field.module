@@ -61,8 +61,9 @@ function coordinate_field_field_widget_info() {
  * Implements hook_field_widget_form()
  */
 function coordinate_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
-  $instance_settings = $instance['settings'];
   $field_settings = $field['settings'];
+
+  dpm($field_settings);
 
   switch($field['type']) {
     case 'coordinate_field':
@@ -90,7 +91,7 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
         '#title' => t('X'),
         '#type' => 'textfield',
         '#size' => 15,
-        '#suffix' => ' x ',
+        '#suffix' => $field_settings['unit'] . ' x ',
         '#value' => isset($items[$delta]['position_x']) ? $items[$delta]['position_x'] : '',
       );
 
@@ -98,6 +99,7 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
         '#title' => t('Y'),
         '#type' => 'textfield',
         '#size' => 15,
+        '#suffix' => $field_settings['unit'],
         '#value' => isset($items[$delta]['position_y']) ? $items[$delta]['position_y'] : '',
       );
       break;
