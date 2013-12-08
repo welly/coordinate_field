@@ -63,7 +63,7 @@ function coordinate_field_field_widget_info() {
 function coordinate_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   $field_settings = $field['settings'];
 
-  switch($field['type']) {
+  switch ($field['type']) {
     case 'coordinate_field':
       // Not sure why we have to manually add the field name to the widget,
       // but seems like we do.
