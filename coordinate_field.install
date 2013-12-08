@@ -4,20 +4,30 @@
  * Implements hook_field_schema()
  */
 function coordinate_field_field_schema($field) {
-  switch($field['type']) {
-    case 'coordinate_field':
-      return array(
-        'columns' => array(
-          'position_x' => array(
-            'type' => 'float',
-            'not null' => FALSE,
-          ),
-          'position_y' => array(
-            'type' => 'float',
-            'not null' => FALSE,
-          ),
-        ),
-      );
-      break;
-  }
+  $columns = array(
+    'position_x' => array(
+      'description' => 'Stores the X value',
+      'type' => 'float',
+      'size' => 'big',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+    'position_y' => array(
+      'description' => 'Stores the Y value',
+      'type' => 'float',
+      'size' => 'big',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+  );
+
+  $indexes = array(
+    'position_x' => array('position_x'),
+    'position_y' => array('position_y'),
+  );
+
+  return array(
+    'columns' => $columns,
+    'indexes' => $indexes,
+  );
 }
