@@ -171,14 +171,15 @@ function coordinate_field_field_formatter_info() {
  */
 function coordinate_field_field_formatter_view($obj_type, $object, $field, $instance, $langcode, $items, $display) {
   $element = '';
+  $field_settings = $field['settings'];
 
   foreach ($items as $delta => $item) {
     if (!empty($item)) {
       switch ($display['type']) {
         case 'coordinate_field_string':
-          // @todo
-          // Actaully put something here
-          $output = 'boom';
+          $output = $item['position_x'] . ' ' . $field_settings['unit'];
+          $output .= ' x ';
+          $output .= $item['position_y'] . ' ' . $field_settings['unit'];
           break;
       }
 
