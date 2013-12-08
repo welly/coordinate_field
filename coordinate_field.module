@@ -85,8 +85,8 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
         ),
       );
 
-      // Pulled this out of the wrapper, now it tries to save and breaks.
-      // Progress!!!
+      // @todo
+      // Put this back in a wrapper so it renders inline
       $element['position_x'] = array(
         '#title' => t('X'),
         '#type' => 'textfield',
