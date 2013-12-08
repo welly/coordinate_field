@@ -146,6 +146,15 @@ function coordinate_field_field_widget_error($element, $error, $form, &$form_sta
 }
 
 /**
+ * Implements hook_field_is_empty()
+ */
+function coordinate_field_field_is_empty($item, $field) {
+  if (empty($item['position_x']) && empty($item['position_y'])) {
+    return TRUE;
+  }
+}
+
+/**
  * Implements hook_field_formatter_info()
  */
 function coordinate_field_field_formatter_info() {
@@ -178,13 +187,4 @@ function coordinate_field_field_formatter_view($obj_type, $object, $field, $inst
   }
 
   return $element;
-}
-
-/**
- * Implements hook_field_is_empty()
- */
-function coordinate_field_field_is_empty($item, $field) {
-  if (empty($item['position_x']) && empty($item['position_y'])) {
-    return TRUE;
-  }
 }
