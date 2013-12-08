@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Implements hook_field_info()
+ */
 function coordinate_field_field_info() {
   return array(
     'coordinate_field' => array(
@@ -14,6 +17,9 @@ function coordinate_field_field_info() {
   );
 }
 
+/**
+ * Implements hook_field_settings_form()
+ */
 function coordinate_field_field_settings_form($field, $instance) {
   $defaults = field_info_field_settings($field['type']);
   $settings = array_merge($defaults, $field['settings']);
@@ -35,6 +41,9 @@ function coordinate_field_field_settings_form($field, $instance) {
   return $form;
 }
 
+/**
+ * Implements hook_field_widget_info()
+ */
 function coordinate_field_field_widget_info() {
   return array(
     'coordinate_field_widget' => array(
@@ -48,6 +57,9 @@ function coordinate_field_field_widget_info() {
   );
 }
 
+/**
+ * Implements hook_field_widget_form()
+ */
 function coordinate_field_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   $instance_settings = $instance['settings'];
   $field_settings = $field['settings'];
@@ -94,6 +106,9 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
   return $element;
 }
 
+/**
+ * Implements hook_field_formatter_info()
+ */
 function coordinate_field_field_formatter_info() {
   return array(
     'coordinate_field_string' => array(
@@ -103,6 +118,9 @@ function coordinate_field_field_formatter_info() {
   );
 }
 
+/**
+ * Implements hook_field_formatter_view()
+ */
 function coordinate_field_field_formatter_view($obj_type, $object, $field, $instance, $langcode, $items, $display) {
   $element = '';
 
@@ -121,7 +139,9 @@ function coordinate_field_field_formatter_view($obj_type, $object, $field, $inst
   return $element;
 }
 
-
+/**
+ * Implements hook_field_is_empty()
+ */
 function coordinate_field_field_is_empty($item, $field) {
   return false;
 }
