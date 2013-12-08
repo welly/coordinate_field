@@ -31,8 +31,8 @@ function coordinate_field_field_settings_form($field, $instance) {
   $units = array('px' => 'Pixels');
 
   $form['unit'] = array(
-    '#title' => t('Coordinate Units'),
-    '#description' => t('Which unit of measure our coordinates will be in'),
+    '#title' => t('Coordinate Unit'),
+    '#description' => t('Which unit of measure our coordinates will be in.'),
     '#type' => 'select',
     '#options' => $units,
     '#default_value' => $settings['unit'],
