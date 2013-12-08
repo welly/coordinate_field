@@ -3,7 +3,7 @@
 function coordinate_field_field_info() {
   return array(
     'coordinate_field' => array(
-      'label' => t('Coordinates'),
+      'label' => t('Coordinate'),
       'description' => t('Store X and Y coordinate values.'),
       'settings' => array(
         'unit' => 'px',
