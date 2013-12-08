@@ -71,7 +71,7 @@ function coordinate_field_field_widget_form(&$form, &$form_state, $field, $insta
         '#markup' => theme('html_tag', array(
           'element' => array(
             '#tag' => 'label',
-            '#value' => $instance['label'],
+            '#value' => filter_xss($instance['label']),
           ),
         )),
       );
