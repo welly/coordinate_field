@@ -207,8 +207,6 @@ function coordinate_field_field_formatter_view($entity_type, $entity, $field, $i
     );
   }
 
-  // dsm($elements);
-
   return $elements;
 }
 
@@ -218,7 +216,6 @@ function coordinate_field_field_formatter_view($entity_type, $entity, $field, $i
  */
 function theme_coordinate_field_formatter_coord_default($vars) {
 
-  // dsm($vars);
   return ($vars['element']['position_x'] . ', ' . $vars['element']['position_y']);
 
 }
@@ -228,7 +225,6 @@ function theme_coordinate_field_formatter_coord_default($vars) {
  */
 function theme_coordinate_field_formatter_coord_xpos($vars) {
 
-  // dsm($vars);
   return ($vars['element']['position_x']);
 
 }
@@ -238,7 +234,6 @@ function theme_coordinate_field_formatter_coord_xpos($vars) {
  */
 function theme_coordinate_field_formatter_coord_ypos($vars) {
 
-  // dsm($vars);
   return ($vars['element']['position_y']);
 
 }
