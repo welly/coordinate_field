@@ -151,38 +151,94 @@ function coordinate_field_field_is_empty($item, $field) {
   }
 }
 
+
 /**
- * Implements hook_field_formatter_info()
+ * Implements hook_theme().
  */
-function coordinate_field_field_formatter_info() {
+function coordinate_field_theme() {
   return array(
-    'coordinate_field_string' => array(
-      'label' => t('String'),
-      'field types' => array('coordinate_field'),
+    'coordinate_field_formatter_coord_default' => array(
+      'variables' => array('element' => NULL, 'field' => NULL),
+    ),
+    'coordinate_field_formatter_coord_xpos' => array(
+      'variables' => array('element' => NULL, 'field' => NULL),
+    ),
+    'coordinate_field_formatter_coord_ypos' => array(
+      'variables' => array('element' => NULL, 'field' => NULL),
     ),
   );
 }
 
 /**
- * Implements hook_field_formatter_view()
+ * Implements hook_field_formatter_info()
  */
-function coordinate_field_field_formatter_view($obj_type, $object, $field, $instance, $langcode, $items, $display) {
-  $element = '';
-  $field_settings = $field['settings'];
+function coordinate_field_field_formatter_info() {
+  return array(
+    'coord_default' => array(
+      'label' => t('String'),
+      'field types' => array('coordinate_field'),
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+    'coord_xpos' => array(
+      'label' => t('X Coordinate'),
+      'field types' => array('coordinate_field'),
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+    'coord_ypos' => array(
+      'label' => t('Y Coordinate'),
+      'field types' => array('coordinate_field'),
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function coordinate_field_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $elements = array();
 
   foreach ($items as $delta => $item) {
-    if (!empty($item)) {
-      switch ($display['type']) {
-        case 'coordinate_field_string':
-          $output = $item['position_x'] . ' ' . $field_settings['unit'];
-          $output .= ' x ';
-          $output .= $item['position_y'] . ' ' . $field_settings['unit'];
-          break;
-      }
-
-      $element[$delta] = array('#markup' => $output);
-    }
+    $elements[$delta] = array(
+      '#theme' => 'coordinate_field_formatter_' . $display['type'],
+      '#element' => $item,
+      '#field' => $instance,
+      '#display' => $display,
+    );
   }
 
-  return $element;
+  // dsm($elements);
+
+  return $elements;
+}
+
+
+/**
+ * Formats a coordinate
+ */
+function theme_coordinate_field_formatter_coord_default($vars) {
+
+  // dsm($vars);
+  return ($vars['element']['position_x'] . ', ' . $vars['element']['position_y']);
+
+}
+
+/**
+ * Formats a coordinate
+ */
+function theme_coordinate_field_formatter_coord_xpos($vars) {
+
+  // dsm($vars);
+  return ($vars['element']['position_x']);
+
+}
+
+/**
+ * Formats a coordinate
+ */
+function theme_coordinate_field_formatter_coord_ypos($vars) {
+
+  // dsm($vars);
+  return ($vars['element']['position_y']);
+
 }
