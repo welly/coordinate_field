@@ -158,13 +158,13 @@ function coordinate_field_field_is_empty($item, $field) {
 function coordinate_field_theme() {
   return array(
     'coordinate_field_formatter_coord_default' => array(
-      'variables' => array('element' => NULL, 'field' => NULL),
+      'variables' => array('element' => NULL, 'display' => NULL, 'field' => NULL, 'instance' => NULL),
     ),
     'coordinate_field_formatter_coord_xpos' => array(
-      'variables' => array('element' => NULL, 'field' => NULL),
+      'variables' => array('element' => NULL, 'field' => NULL, 'instance' => NULL),
     ),
     'coordinate_field_formatter_coord_ypos' => array(
-      'variables' => array('element' => NULL, 'field' => NULL),
+      'variables' => array('element' => NULL, 'field' => NULL, 'instance' => NULL),
     ),
   );
 }
@@ -175,17 +175,20 @@ function coordinate_field_theme() {
 function coordinate_field_field_formatter_info() {
   return array(
     'coord_default' => array(
-      'label' => t('String'),
+      'label' => t('Default'),
       'field types' => array('coordinate_field'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      'settings' => array(
+        'display_unit' => TRUE,
+      ),
     ),
     'coord_xpos' => array(
-      'label' => t('X Coordinate'),
+      'label' => t('X value'),
       'field types' => array('coordinate_field'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
     ),
     'coord_ypos' => array(
-      'label' => t('Y Coordinate'),
+      'label' => t('Y value'),
       'field types' => array('coordinate_field'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
     ),
@@ -193,16 +196,50 @@ function coordinate_field_field_formatter_info() {
 }
 
 /**
+ * Implements hook_field_formatter_settings_form().
+ */
+function coordinate_field_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $element = array();
+  if ($display['type'] == 'coord_default') {
+    $element['display_unit'] = array(
+      '#title' => t('Display unit'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['display_unit'],
+    );
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function coordinate_field_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  if ($display['type'] == 'coord_default') {
+    if ($display['settings']['display_unit']) {
+      return t('Display unit');
+    }
+    else {
+      return t('Hide unit');
+    }
+  }
+  return '';
+}
+
+/**
  * Implements hook_field_formatter_view().
  */
 function coordinate_field_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $elements = array();
-
   foreach ($items as $delta => $item) {
     $elements[$delta] = array(
       '#theme' => 'coordinate_field_formatter_' . $display['type'],
       '#element' => $item,
-      '#field' => $instance,
+      '#field' => $field,
+      '#instance' => $instance,
       '#display' => $display,
     );
   }
@@ -216,7 +253,14 @@ function coordinate_field_field_formatter_view($entity_type, $entity, $field, $i
  */
 function theme_coordinate_field_formatter_coord_default($vars) {
 
-  return ($vars['element']['position_x'] . ', ' . $vars['element']['position_y']);
+  $element = $vars['element'];
+  $display = $vars['display'];
+  $field = $vars['field'];
+  $output = $element['position_x'] . ($display['settings']['display_unit'] ? $field['settings']['unit'] : '');
+  $output .= ', ';
+  $output .= $element['position_y'] . ($display['settings']['display_unit'] ? $field['settings']['unit'] : '');
+
+  return ($output);
 
 }
 
