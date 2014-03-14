@@ -161,10 +161,10 @@ function coordinate_field_theme() {
       'variables' => array('element' => NULL, 'display' => NULL, 'field' => NULL, 'instance' => NULL),
     ),
     'coordinate_field_formatter_coord_xpos' => array(
-      'variables' => array('element' => NULL, 'field' => NULL, 'instance' => NULL),
+      'variables' => array('element' => NULL, 'display' => NULL, 'field' => NULL, 'instance' => NULL),
     ),
     'coordinate_field_formatter_coord_ypos' => array(
-      'variables' => array('element' => NULL, 'field' => NULL, 'instance' => NULL),
+      'variables' => array('element' => NULL, 'display' => NULL, 'field' => NULL, 'instance' => NULL),
     ),
   );
 }
@@ -186,11 +186,17 @@ function coordinate_field_field_formatter_info() {
       'label' => t('X value'),
       'field types' => array('coordinate_field'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      'settings' => array(
+        'display_unit' => TRUE,
+      ),
     ),
     'coord_ypos' => array(
       'label' => t('Y value'),
       'field types' => array('coordinate_field'),
       'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      'settings' => array(
+        'display_unit' => TRUE,
+      ),
     ),
   );
 }
@@ -199,34 +205,31 @@ function coordinate_field_field_formatter_info() {
  * Implements hook_field_formatter_settings_form().
  */
 function coordinate_field_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
-  $display = $instance['display'][$view_mode];
-  $settings = $display['settings'];
-  $element = array();
-  if ($display['type'] == 'coord_default') {
+    $display = $instance['display'][$view_mode];
+    $settings = $display['settings'];
+    $element = array();
     $element['display_unit'] = array(
-      '#title' => t('Display unit'),
-      '#type' => 'checkbox',
-      '#default_value' => $settings['display_unit'],
+        '#title' => t('Display unit'),
+        '#type' => 'checkbox',
+        '#default_value' => $settings['display_unit'],
     );
-  }
-  return $element;
+    return $element;
 }
 
 /**
  * Implements hook_field_formatter_settings_summary().
  */
 function coordinate_field_field_formatter_settings_summary($field, $instance, $view_mode) {
-  $display = $instance['display'][$view_mode];
-  $settings = $display['settings'];
-  if ($display['type'] == 'coord_default') {
+    $display = $instance['display'][$view_mode];
+    $settings = $display['settings'];
+
     if ($display['settings']['display_unit']) {
-      return t('Display unit');
+        return t('Display unit');
     }
     else {
-      return t('Hide unit');
+        return t('Hide unit');
     }
-  }
-  return '';
+    return '';
 }
 
 /**
@@ -249,7 +252,9 @@ function coordinate_field_field_formatter_view($entity_type, $entity, $field, $i
 
 
 /**
- * Formats a coordinate
+ * Default coordinate theme function. Outputs using the format 'x, y'. If the
+ * display unit setting for the formatter is set, it will append the field unit
+ * type to each coordinate
  */
 function theme_coordinate_field_formatter_coord_default($vars) {
 
@@ -265,19 +270,29 @@ function theme_coordinate_field_formatter_coord_default($vars) {
 }
 
 /**
- * Formats a coordinate
+ * X coordinate theme function. Outputs only the X coordinate. If the display
+ * unit setting for the formatter is set, it will append the field unit type.
  */
 function theme_coordinate_field_formatter_coord_xpos($vars) {
 
-  return ($vars['element']['position_x']);
+    $element = $vars['element'];
+    $display = $vars['display'];
+    $field = $vars['field'];
+
+    return ($element['position_x'] . ($display['settings']['display_unit'] ? $field['settings']['unit'] : ''));
 
 }
 
 /**
- * Formats a coordinate
+ * Y coordinate theme function. Outputs only the Y coordinate. If the display
+ * unit setting for the formatter is set, it will append the field unit type.
  */
 function theme_coordinate_field_formatter_coord_ypos($vars) {
 
-  return ($vars['element']['position_y']);
+    $element = $vars['element'];
+    $display = $vars['display'];
+    $field = $vars['field'];
+
+    return ($element['position_y'] . ($display['settings']['display_unit'] ? $field['settings']['unit'] : ''));
 
 }
